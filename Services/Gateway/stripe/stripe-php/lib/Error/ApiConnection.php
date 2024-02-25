@@ -1,0 +1,9 @@
+<?php
+
+declare(strict_types=1);
+
+namespace StripeJS\Error;
+
+class ApiConnection extends Base
+{
+}

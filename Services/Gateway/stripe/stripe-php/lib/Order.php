@@ -1,0 +1,86 @@
+<?php
+
+declare(strict_types=1);
+
+namespace StripeJS;
+
+/**
+ * Class Order.
+ */
+class Order extends ApiResource
+{
+    /**
+     * @param array|string      $id   the ID of the order to retrieve, or an options
+     *                                array containing an `id` key
+     * @param array|string|null $opts
+     *
+     * @return Order
+     */
+    public static function retrieve($id, $opts = null)
+    {
+        return self::_retrieve($id, $opts);
+    }
+
+    /**
+     * @param array|null        $params
+     * @param array|string|null $opts
+     *
+     * @return Order the created Order
+     */
+    public static function create($params = null, $opts = null)
+    {
+        return self::_create($params, $opts);
+    }
+
+    /**
+     * @param string            $id      the ID of the order to update
+     * @param array|null        $params
+     * @param array|string|null $options
+     *
+     * @return Order the updated order
+     */
+    public static function update($id, $params = null, $options = null)
+    {
+        return self::_update($id, $params, $options);
+    }
+
+    /**
+     * @param array|string|null $opts
+     *
+     * @return Order the saved Order
+     */
+    public function save($opts = null)
+    {
+        return $this->_save($opts);
+    }
+
+    /**
+     * @param array|null        $params
+     * @param array|string|null $opts
+     *
+     * @return Collection of Orders
+     */
+    public static function all($params = null, $opts = null)
+    {
+        return self::_all($params, $opts);
+    }
+
+    /** @return Order the paid order */
+    public function pay($params = null, $opts = null)
+    {
+        $url = $this->instanceUrl().'/pay';
+        [$response, $opts] = $this->_request('post', $url, $params, $opts);
+        $this->refreshFrom($response, $opts);
+
+        return $this;
+    }
+
+    /** @return OrderReturn the newly created return */
+    public function returnOrder($params = null, $opts = null)
+    {
+        $url = $this->instanceUrl().'/returns';
+        [$response, $opts] = $this->_request('post', $url, $params, $opts);
+
+        return Util\Util::convertToStripeJSObject($response, $opts);
+    }
+}
